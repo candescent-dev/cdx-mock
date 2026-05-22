@@ -13,7 +13,7 @@ import {mockPartnersBaseUrl} from '../lib/partner-port.js'
  *      (CORS check; partner must allowlist the FI's origin in production)
  *   2. /api/widget/start  →  returns { data: { authorizationUrl } } that points
  *                            at the mock FI authorization server. In production
- *                            this URL is on the FI's IdP (Apigee + NIIS + Keycloak).
+ *                            this URL is on the FI's OIDC identity provider.
  *   3. Aspect             →  iframe.src = authorizationUrl
  *   4. /oidc-mock/authorize → renders "Signing you in as Mock User…" then
  *                             auto-redirects to redirect_uri with ?code=…&state=…
@@ -150,7 +150,7 @@ export async function registerWidgetStart(app: FastifyInstance) {
     <div class="map">
       <h2>Production mapping</h2>
       <ul>
-        <li>This page → <strong>FI IdP</strong> (Apigee app + NIIS config + Keycloak / federation)</li>
+        <li>This page → <strong>FI identity provider</strong> (OIDC authorization server)</li>
         <li>The partner's OIDC client must be registered <em>per FI</em> on the IdP, with this exact <code>redirect_uri</code> on the allowlist.</li>
         <li>For partner-bridged offer flows: this is the FI-specific authorization server that the partner's <code>widget/start</code> redirects to.</li>
       </ul>

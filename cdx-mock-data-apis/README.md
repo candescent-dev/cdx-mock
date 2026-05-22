@@ -1,10 +1,12 @@
 # cdx-mock-data-apis
 
-Lightweight mock API server for **Candescent extension development**. Provides realistic financial data responses for all widget and aspect template scenarios — no Docker or external services required.
+Lightweight mock API server for **Candescent Forge** widget and aspect development. Provides synthetic financial data for chart, chat, and OIDC demo scenarios — no Docker or external services required.
 
-Built with [Hono](https://hono.dev) + TypeScript. Runs on Node.js 18+. Listens on **`127.0.0.1`** only (local development).
+Works with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package ([install via npm or Homebrew](https://docs.candescent.com/guides/cli/installation)).
 
-All responses use **synthetic data** — no real customer or account information.
+Built with [Hono](https://hono.dev) + TypeScript. Runs on Node.js 18+. Listens on **`127.0.0.1`** only.
+
+Part of the [**cdx-mock**](https://github.com/candescent-dev/cdx-mock) repository.
 
 ## Quick Start
 
@@ -104,9 +106,9 @@ These work on **any** endpoint:
 |---|---|---|
 | `PORT` | `4010` | Server port |
 
-## Integration with `forge` CLI
+## Integration with Forge CLI
 
-The `forge` CLI auto-detects this server when running:
+When this server is running on port `4010`, the **`forge`** command auto-detects it for:
 
 1. **`forge widget create --template data-chart`** — Detects available datasets, presents a picker
 2. **`forge widget create --template agent-chat`** — Defaults `agentEndpoint` to `localhost:4010`
@@ -124,4 +126,4 @@ The `forge` CLI auto-detects this server when running:
 
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE).

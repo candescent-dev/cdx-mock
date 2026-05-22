@@ -32,8 +32,8 @@ const PORT_SCAN_MAX = 64
  *   GET  /offers/widget              — the partner widget UI with dismiss buttons
  *   GET  /auth/authorize             — mirrors the OIDC toolkit on :9000 for offline use
  *
- * Every mock SDK records its calls into `window.__mockPartnerCalls`, which is
- * the assertion surface for e2e tests (e.g. Candescent `dbk-dx-analysis` harness).
+ * Every mock SDK records its calls into `window.__mockPartnerCalls` for local
+ * testing and automation.
  */
 export async function buildServer() {
   const app = Fastify({logger: {level: process.env.LOG_LEVEL ?? 'info'}})

@@ -1,25 +1,41 @@
 import type {FastifyInstance} from 'fastify'
+import {execSync} from 'node:child_process'
 import {existsSync} from 'node:fs'
 import {dirname, resolve} from 'node:path'
 import {fileURLToPath, pathToFileURL} from 'node:url'
 
 /**
  * Gallery route: serves a single page that runs every (template, preset)
- * combo from the built `cdx-forge-cli` against this mock partner server.
+ * combo from the installed `@cdx-forge/cli` package against this mock server.
  *
  *   GET  /gallery                     — index of every template × preset
  *   GET  /gallery/run/:template/:preset?platform=web|mobile
  *                                    — runs one combo in an isolated frame
  *
- * The route lazy-imports the CLI dist so the mock server can boot
- * without it. If the build is missing we render a friendly error page.
+ * Lazy-imports the CLI dist so the mock server can boot without Forge installed.
  */
 function resolveCliAspectDist(): string {
   const env = process.env.FORGE_CLI_DIST?.trim()
   if (env) return resolve(env)
+
+  const candidates: string[] = []
   const HERE = dirname(fileURLToPath(import.meta.url))
-  // routes/ → repo root → public-github-repos → <code root> → cdx-forge-cli/dist/lib/aspect
-  return resolve(HERE, '..', '..', '..', 'cdx-forge-cli', 'dist', 'lib', 'aspect')
+  candidates.push(resolve(HERE, '..', '..', 'node_modules', '@cdx-forge/cli', 'dist/lib/aspect'))
+
+  for (const cmd of ['npm root -g', 'pnpm root -g']) {
+    try {
+      const root = execSync(cmd, {encoding: 'utf8'}).trim()
+      candidates.push(resolve(root, '@cdx-forge/cli', 'dist/lib/aspect'))
+    } catch {
+      // global package manager not available
+    }
+  }
+
+  for (const dir of candidates) {
+    if (existsSync(resolve(dir, 'templates.js'))) return dir
+  }
+
+  return candidates[0] ?? resolve(HERE, '..', '..', 'node_modules', '@cdx-forge/cli', 'dist/lib/aspect')
 }
 
 export async function registerGallery(app: FastifyInstance) {
@@ -216,7 +232,7 @@ function buildIndexPage(cli: CliBundle): string {
 <body>
   <header class="top">
     <h1>Aspect Template Gallery</h1>
-    <p>Every <code>(template, preset)</code> combo shipped by <code>cdx-forge-cli</code>, running against this local mock server. Click ▶ Run to render in the right pane.</p>
+    <p>Every <code>(template, preset)</code> combo from the installed <code>@cdx-forge/cli</code> package, running against this local mock server. Click ▶ Run to render in the right pane.</p>
   </header>
   <main>
     <section class="list">
@@ -291,9 +307,9 @@ function buildMissingDistPage(): string {
 <html><head><meta charset="utf-8"><title>Gallery — build needed</title></head>
 <body style="font:14px system-ui,sans-serif;padding:24px;max-width:600px;color:#1e293b">
   <h1 style="margin:0 0 8px">Gallery is offline</h1>
-  <p>The gallery imports built templates + presets from <code>cdx-forge-cli/dist</code>, but no build was found.</p>
-  <p>Build the CLI (sibling checkout next to <code>public-github-repos</code>), or set <code>FORGE_CLI_DIST</code> to the folder containing <code>templates.js</code> and <code>presets.js</code>:</p>
-  <pre style="background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px">cd ../cdx-forge-cli &amp;&amp; pnpm build</pre>
+  <p>The gallery loads templates + presets from the installed <code>@cdx-forge/cli</code> package, but none were found.</p>
+  <p>Install Forge (<code>npm install -g @cdx-forge/cli</code> or Homebrew), then set <code>FORGE_CLI_DIST</code> and restart this server:</p>
+  <pre style="background:#0f172a;color:#e2e8f0;padding:12px;border-radius:6px">export FORGE_CLI_DIST="$(npm root -g)/@cdx-forge/cli/dist/lib/aspect"</pre>
   <p>Then refresh this page.</p>
 </body></html>`
 }

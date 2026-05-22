@@ -2,7 +2,7 @@ import type {FastifyInstance} from 'fastify'
 
 /**
  * Mirrors the response shape of the OIDC Toolkit (`localhost:9000/api/auth/authorize`)
- * so the existing `oidc-snippet` template in cdx-forge-cli can run end-to-end
+ * so the Forge CLI `oidc-snippet` aspect template can run end-to-end
  * against this mock server when the toolkit is not running.
  */
 export async function registerAuth(app: FastifyInstance) {

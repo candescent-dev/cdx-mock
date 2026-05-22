@@ -1,17 +1,23 @@
 # cdx-mock-partners
 
-Local **Fastify** server on **`http://localhost:4011`** by default (or the next free port if `4011` is busy) that serves static **mock partner / vendor SDK** assets and a few dynamic routes. It pairs with the published **[`@cdx-forge/cli`](https://www.npmjs.com/package/@cdx-forge/cli)** package: Forge aspect presets point at `http://localhost:4011/…`; if this server auto-advances to e.g. `4012`, use **`GET /vendors`** for URLs that match the bound port, or set **`MOCK_PARTNERS_STRICT_PORT=1`** to fail fast instead.
+Local **Fastify** server on **`http://localhost:4011`** by default (or the next free port if `4011` is busy). Serves mock partner / vendor SDK scripts and a few dynamic routes for use with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package.
 
-This repo is the public companion to **internal** CSV/analysis tooling; it contains **no** customer data — only synthetic mocks. Listens on **`127.0.0.1`** only.
+Forge aspect presets point at `http://localhost:4011/…`. If this server binds to another port (e.g. `4012`), use **`GET /vendors`** for URLs that match the actual port, or set **`MOCK_PARTNERS_STRICT_PORT=1`** to fail fast instead.
+
+All data is **synthetic**. The server listens on **`127.0.0.1`** only.
 
 Partner mocks reference vendor product names (Glia, Salesforce, Five9, UJET, Google Tag Manager, etc.) only to simulate integration APIs for local development. They are **unofficial stubs**, not affiliated with those vendors, and do not ship proprietary SDK code.
 
-## Related repos
+Part of the [**cdx-mock**](https://github.com/candescent-dev/cdx-mock) repository. See also [`cdx-mock-data-apis`](../cdx-mock-data-apis) (`:4010`).
 
-| Repo | Role |
-|------|------|
-| [`cdx-mock-data-apis`](../cdx-mock-data-apis) | Mock **Core-style REST** data on `:4010` |
-| **`cdx-mock-partners`** (this package) | Mock **third-party scripts**, SSO handoff HTML, JSBridge token, `/gallery` |
+## Install Forge CLI
+
+```bash
+brew tap candescent-dev/forge && brew install forge-cli
+# or: npm install -g @cdx-forge/cli
+```
+
+[Installation guide](https://docs.candescent.com/guides/cli/installation)
 
 ## Run
 
@@ -22,27 +28,36 @@ pnpm start
 # → http://localhost:4011/vendors
 ```
 
-- **Preferred port:** `MOCK_PARTNERS_PORT` (default `4011`). **`MOCK_VENDORS_PORT`** is still read if `MOCK_PARTNERS_PORT` is unset (older docs/scripts).
-- **Port busy:** unless **`MOCK_PARTNERS_STRICT_PORT=1`**, the server tries **`MOCK_PARTNERS_PORT` … +63** on `127.0.0.1` until `listen` succeeds (same idea as the Forge CLI’s free-port helper). **`GET /vendors`** and Link Live JSON use the **actual** bound port.
-- **Fail fast on conflict:** `MOCK_PARTNERS_STRICT_PORT=1 pnpm start` keeps the previous behavior (exit with `EADDRINUSE` + stderr hints).
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MOCK_PARTNERS_PORT` | `4011` | Preferred listen port (`MOCK_VENDORS_PORT` is a legacy alias) |
+| `MOCK_PARTNERS_STRICT_PORT` | off | Exit on `EADDRINUSE` instead of scanning the next ports |
+| `LOG_LEVEL` | `info` | Fastify log level |
+
+Unless **`MOCK_PARTNERS_STRICT_PORT=1`**, the server tries ports **`MOCK_PARTNERS_PORT` … +63** on `127.0.0.1` until one is free. **`GET /vendors`** and Link Live JSON reflect the bound port.
 
 ### MOCK pill missing in Forge preview
 
-Partner SDKs are usually injected with **`async`**. In that case **`document.currentScript` is `null`**, and guessing the script URL from `document.scripts` can point at the **wrong** script (e.g. Forge’s `/aspect.js` on `:3456`). The mocks then try to load `mock-overlay.js` from the **preview origin** instead of the mock server origin, and the **MOCK · …** pill never appears. The bundled SDKs scan for their own path (e.g. `/vendors/glia/sdk.js`) to resolve the correct origin.
+Partner SDKs are usually injected with **`async`**, so **`document.currentScript` is `null`**. Guessing the script URL from `document.scripts` can select the wrong script (e.g. Forge preview `/aspect.js` on `:3456`). The mocks then load `mock-overlay.js` from the preview origin instead of the mock server, and the **MOCK · …** badge does not appear. Bundled SDKs locate their own path (e.g. `/vendors/glia/sdk.js`) to resolve the correct origin.
 
-### `EADDRINUSE` (strict mode or no free port in range)
+### Port already in use
 
-With **`MOCK_PARTNERS_STRICT_PORT=1`**, or if **every** port in the scan window is taken, startup fails like before. Then either stop the old listener (`lsof -nP -iTCP:4011 | grep LISTEN`) or pick a free **`MOCK_PARTNERS_PORT`**. With default (non-strict) behavior, a busy preferred port is resolved automatically; **`forge aspect preview`** still probes **`:4011` first** — if you rely on presets without overrides, stop the duplicate mock or align the CLI’s mock detection with your port.
+With strict mode, or if every port in the scan range is taken, stop the old listener (`lsof -nP -iTCP:4011 | grep LISTEN`) or set a free **`MOCK_PARTNERS_PORT`**. **`forge aspect preview`** probes **`:4011` first** — align presets or stop duplicate mock processes if you rely on defaults.
 
-## Template gallery
+## Template gallery (optional)
 
-`/gallery` loads built **`cdx-forge-cli`** templates from `dist/lib/aspect` (`templates.js`, `presets.js`).
+**`GET /gallery`** runs every aspect `(template, preset)` from the **installed** Forge CLI package (`dist/lib/aspect/templates.js`, `presets.js`). The Forge CLI is not published as source; install it from npm or Homebrew first.
 
-1. Check out the **Forge CLI** (`cdx-forge-cli` / `@cdx-forge/cli` source) as a **sibling** of your `code` root (same layout as Candescent’s monorepo: `code/cdx-forge-cli`, `code/public-github-repos/cdx-mock-partners`).
-2. `cd cdx-forge-cli && pnpm install && pnpm build`
-3. Start this server, then open **`http://localhost:4011/gallery`**.
+```bash
+npm install -g @cdx-forge/cli
+export FORGE_CLI_DIST="$(npm root -g)/@cdx-forge/cli/dist/lib/aspect"
+pnpm start
+# → http://localhost:4011/gallery
+```
 
-Or set **`FORGE_CLI_DIST`** to the directory that already contains `templates.js` and `presets.js` (typically `…/cdx-forge-cli/dist/lib/aspect`).
+If you use **pnpm** globally: `export FORGE_CLI_DIST="$(pnpm root -g)/@cdx-forge/cli/dist/lib/aspect"`.
+
+You can also set **`FORGE_CLI_DIST`** to any directory that already contains `templates.js` and `presets.js`.
 
 ## API surface
 
@@ -56,7 +71,7 @@ Or set **`FORGE_CLI_DIST`** to the directory that already contains `templates.js
 | `GET /auth/authorize?...` | OIDC-toolkit-shaped mock |
 | `GET /help` | Help page for floating-action-button |
 | `GET /link-live/handoff/:variant` | JSON config for Link Live presets |
-| `GET /gallery`, `GET /gallery/run/...` | Template × preset runner |
+| `GET /gallery`, `GET /gallery/run/...` | Template × preset runner (requires Forge CLI install) |
 
 ## Programmatic use
 
@@ -66,15 +81,17 @@ import {buildServer, setPartnerListenPort} from 'cdx-mock-partners'
 const app = await buildServer()
 const port = 4011
 await app.listen({port, host: '127.0.0.1'})
-setPartnerListenPort(port) // so GET /vendors + Link Live JSON use the same origin
+setPartnerListenPort(port)
 ```
-
-Used by Candescent’s **dbk-dx-analysis** e2e harness (`pnpm test`, `verify-mock-coverage`) via a `file:` dependency.
 
 ## Mock SDK conventions
 
 1. Auto-bootstrap on load (same as real SDKs).
-2. Show a **MOCK · \<vendor\>** badge via `public/_shared/mock-overlay.js`; badge opens an interactive panel.
-3. Record calls on `window.__mockPartnerCalls` for tests.
+2. Show a **MOCK · \<vendor\>** badge via `public/_shared/mock-overlay.js`.
+3. Record calls on `window.__mockPartnerCalls` for local testing.
 
-See the original vendor table in `server.ts` (`listVendors()`) for ids and template pairings.
+Vendor ids and template pairings are listed in `server.ts` (`listVendors()`).
+
+## License
+
+MIT — see [LICENSE](./LICENSE).

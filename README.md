@@ -1,29 +1,41 @@
-# Candescent Forge local mocks
+# cdx-mock
 
-Local-only mock servers for [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) widget and aspect development. No Docker or external services required.
+Local mock servers for [**Candescent Forge**](https://docs.candescent.com/guides/cli/overview) widget and aspect development. Use them with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package — no Docker or external services required.
 
-| Package | Default port | Purpose |
-|---------|--------------|---------|
+## Install Forge CLI
+
+Forge is distributed on **npm** and **Homebrew** (there is no public Forge source repository):
+
+```bash
+# Homebrew (macOS / Linux)
+brew tap candescent-dev/forge
+brew install forge-cli
+
+# npm / pnpm
+npm install -g @cdx-forge/cli
+```
+
+Install guide: [Forge CLI installation](https://docs.candescent.com/guides/cli/installation).
+
+## Mock servers
+
+| Package | Port | Purpose |
+|---------|------|---------|
 | [`cdx-mock-data-apis`](./cdx-mock-data-apis) | `4010` | Mock Core-style REST (charts, agent chat, protected profile, account summary) |
-| [`cdx-mock-partners`](./cdx-mock-partners) | `4011` | Mock third-party partner SDKs, SSO handoffs, OIDC widget flows, `/gallery` |
+| [`cdx-mock-partners`](./cdx-mock-partners) | `4011` | Mock partner SDKs, SSO handoffs, OIDC widget flows, optional `/gallery` |
 
-## Quick start
-
-Run both servers in separate terminals:
+Clone this repository, then run each server in its own terminal:
 
 ```bash
-cd cdx-mock-data-apis && pnpm install && pnpm dev
+git clone https://github.com/candescent-dev/cdx-mock.git
+cd cdx-mock/cdx-mock-data-apis && pnpm install && pnpm dev
 ```
 
 ```bash
-cd cdx-mock-partners && pnpm install && pnpm start
+cd cdx-mock/cdx-mock-partners && pnpm install && pnpm start
 ```
 
-Then use Forge (`forge widget create`, `forge aspect preview`, etc.). The CLI defaults to `http://localhost:4010` and `http://localhost:4011`.
-
-## Publishing layout
-
-Published as the [**cdx-mock**](https://github.com/candescent-dev/cdx-mock) monorepo on [candescent-dev](https://github.com/candescent-dev).
+The Forge CLI defaults to `http://localhost:4010` and `http://localhost:4011` when creating widgets and previewing aspects.
 
 ## Third-party names
 
