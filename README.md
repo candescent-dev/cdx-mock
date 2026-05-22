@@ -37,7 +37,7 @@ cd cdx-mock/cdx-mock-data-apis && pnpm install && pnpm dev
 cd cdx-mock/cdx-mock-partners && pnpm install && pnpm start
 ```
 
-The Forge CLI defaults to `http://localhost:4010` and `http://localhost:4011` when creating widgets and previewing aspects.
+The Forge CLI defaults to `http://localhost:4010` and `http://localhost:4011` when creating widgets and previewing aspects. On preview, **`forge`** can clone this repository to `~/.forge/cdx-mock` and start the required mock automatically (disable with `FORGE_SKIP_MOCK_AUTO_START=1`).
 
 ## Third-party names
 
