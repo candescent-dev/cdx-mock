@@ -23,10 +23,7 @@ Then use Forge (`forge widget create`, `forge aspect preview`, etc.). The CLI de
 
 ## Publishing layout
 
-These packages can live in **one monorepo** (this folder) or as **two separate repos** on [candescent-dev](https://github.com/candescent-dev):
-
-- [cdx-mock-data-apis](https://github.com/candescent-dev/cdx-mock-data-apis)
-- [cdx-mock-partners](https://github.com/candescent-dev/cdx-mock-partners)
+Published as the [**cdx-mock**](https://github.com/candescent-dev/cdx-mock) monorepo on [candescent-dev](https://github.com/candescent-dev).
 
 ## Third-party names
 

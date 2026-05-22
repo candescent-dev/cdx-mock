@@ -10,8 +10,8 @@ Partner mocks reference vendor product names (Glia, Salesforce, Five9, UJET, Goo
 
 | Repo | Role |
 |------|------|
-| [`cdx-mock-data-apis`](https://github.com/candescent-dev/cdx-mock-data-apis) | Mock **Core-style REST** data on `:4010` |
-| **`cdx-mock-partners`** (this repo) | Mock **third-party scripts**, SSO handoff HTML, JSBridge token, `/gallery` |
+| [`cdx-mock-data-apis`](../cdx-mock-data-apis) | Mock **Core-style REST** data on `:4010` |
+| **`cdx-mock-partners`** (this package) | Mock **third-party scripts**, SSO handoff HTML, JSBridge token, `/gallery` |
 
 ## Run
 

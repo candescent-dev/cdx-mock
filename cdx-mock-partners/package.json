@@ -23,7 +23,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/candescent-dev/cdx-mock-partners.git"
+    "url": "https://github.com/candescent-dev/cdx-mock.git",
+    "directory": "cdx-mock-partners"
   },
   "engines": {
     "node": ">=20"
