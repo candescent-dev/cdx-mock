@@ -1,0 +1,41 @@
+{
+  "name": "cdx-mock-partners",
+  "version": "0.1.0",
+  "description": "Local mock HTTP server and static stubs for third-party partner scripts used with Candescent Forge aspect development (Glia, GTM, SSO handoffs, mobile JSBridge tokens, etc.)",
+  "type": "module",
+  "exports": {
+    ".": "./server.ts"
+  },
+  "scripts": {
+    "start": "node --import tsx/esm server.ts",
+    "mock-partners": "node --import tsx/esm server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "candescent",
+    "cdx",
+    "forge",
+    "mock",
+    "aspects",
+    "extensions"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/candescent-dev/cdx-mock-partners.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fastify/static": "^7.0.4",
+    "fastify": "^4.28.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.4"
+  }
+}

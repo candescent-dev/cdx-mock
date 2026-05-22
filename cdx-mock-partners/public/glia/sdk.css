@@ -1,0 +1,21 @@
+/* Mock Glia stylesheet — intentionally minimal. */
+[data-mock-glia-bubble] {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 99997;
+  width: 56px;
+  height: 56px;
+  border: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: #6366f1;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 18px system-ui, sans-serif;
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.45);
+  cursor: pointer;
+}

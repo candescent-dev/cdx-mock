@@ -1,0 +1,13 @@
+/* Mock Link Live stylesheet — proves the CSS URL global was consumed by the loader. */
+body::after {
+  content: 'mock link-live css loaded';
+  position: fixed;
+  bottom: 4px;
+  left: 4px;
+  z-index: 99996;
+  font: 11px ui-monospace, monospace;
+  color: #64748b;
+  background: rgba(248, 250, 252, 0.85);
+  padding: 2px 6px;
+  border-radius: 4px;
+}

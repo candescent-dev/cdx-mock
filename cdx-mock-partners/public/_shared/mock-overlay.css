@@ -1,0 +1,66 @@
+:root {
+  --mock-bg: #0f172a;
+  --mock-fg: #f8fafc;
+  --mock-accent: #38bdf8;
+}
+
+[data-mock-partner] {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--mock-bg);
+  color: var(--mock-fg);
+  font: 600 12px/1.2 system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-mock-partner]::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mock-accent);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+}
+
+[data-mock-partner-panel] {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 320px;
+  max-height: 60vh;
+  overflow: auto;
+  z-index: 99998;
+  padding: 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+}
+
+[data-mock-partner-panel] h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+}
+
+[data-mock-partner-panel] pre {
+  margin: 0;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
