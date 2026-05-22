@@ -1,6 +1,8 @@
 # cdx-mock
 
-Local mock servers for [**Candescent Forge**](https://docs.candescent.com/guides/cli/overview) widget and aspect development. Use them with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package — no Docker or external services required.
+Local HTTP mocks for [**Candescent Forge**](https://docs.candescent.com/guides/cli/overview/) widget and aspect development: synthetic REST data on port **4010** and partner SDK / OIDC stubs on **4011**. Use alongside the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package — no Docker or external services required.
+
+**Docs:** [Forge CLI overview](https://docs.candescent.com/guides/cli/overview/)
 
 ## Install Forge CLI
 
@@ -15,7 +17,7 @@ brew install forge-cli
 npm install -g @cdx-forge/cli
 ```
 
-Install guide: [Forge CLI installation](https://docs.candescent.com/guides/cli/installation).
+Install guide: [Forge CLI installation](https://docs.candescent.com/guides/cli/installation/)
 
 ## Mock servers
 

@@ -17,7 +17,7 @@ brew tap candescent-dev/forge && brew install forge-cli
 # or: npm install -g @cdx-forge/cli
 ```
 
-[Installation guide](https://docs.candescent.com/guides/cli/installation)
+[Forge CLI overview](https://docs.candescent.com/guides/cli/overview/) · [Installation](https://docs.candescent.com/guides/cli/installation/)
 
 ## Run
 

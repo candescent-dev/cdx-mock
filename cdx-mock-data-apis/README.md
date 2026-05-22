@@ -2,7 +2,7 @@
 
 Lightweight mock API server for **Candescent Forge** widget and aspect development. Provides synthetic financial data for chart, chat, and OIDC demo scenarios — no Docker or external services required.
 
-Works with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package ([install via npm or Homebrew](https://docs.candescent.com/guides/cli/installation)).
+Works with the published [**`@cdx-forge/cli`**](https://www.npmjs.com/package/@cdx-forge/cli) package. See the [Forge CLI overview](https://docs.candescent.com/guides/cli/overview/) and [installation guide](https://docs.candescent.com/guides/cli/installation/).
 
 Built with [Hono](https://hono.dev) + TypeScript. Runs on Node.js 18+. Listens on **`127.0.0.1`** only.
 
