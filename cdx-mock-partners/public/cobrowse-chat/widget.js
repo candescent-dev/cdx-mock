@@ -1,8 +1,8 @@
 /**
- * Mock Acquire chat / co-browse SDK.
+ * Mock co-browse chat SDK.
  *
- * Pairs with the `vendor-sdk-personalized` template (preset: acquire). Real
- * Acquire exposes `AcquireApp.init(account, options)` — we mirror that.
+ * Pairs with the `vendor-sdk-personalized` template (preset: cobrowse-chat).
+ * Real co-browse SDKs expose `AcquireApp.init(account, options)` — we mirror that.
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -25,22 +25,23 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb()
     var s = document.createElement('script')
-    var origin = mockPartnerScriptOrigin('/vendors/acquire/widget.js')
+    var origin = mockPartnerScriptOrigin('/vendors/cobrowse-chat/widget.js')
     s.src = origin + '/vendors/_shared/mock-overlay.js'
     s.onload = cb
     document.head.appendChild(s)
   }
 
   loadOverlay(function () {
-    var badge = window.MockOverlay.create('Acquire')
+    var partner = 'cobrowse-chat'
+    var badge = window.MockOverlay.create('Co-browse Chat')
     window.AcquireApp = window.AcquireApp || {}
     window.AcquireApp.init = function (account, options) {
-      window.MockOverlay.recordCall('Acquire', 'init', {account: account, options: options || {}})
+      window.MockOverlay.recordCall(partner, 'init', {account: account, options: options || {}})
       var name = (options && options.name) || (window.PreChatFields && window.PreChatFields.name) || ''
       badge.update({userFullName: name})
     }
 
-    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: 'acquire'}}))
-    window.MockOverlay.recordCall('Acquire', 'sdk-ready', {})
+    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: partner}}))
+    window.MockOverlay.recordCall(partner, 'sdk-ready', {})
   })
 })()

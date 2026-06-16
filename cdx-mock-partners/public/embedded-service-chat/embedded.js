@@ -1,14 +1,9 @@
 /**
- * Mock Salesforce Embedded Service chat SDK.
+ * Mock embedded service chat SDK.
  *
- * Pairs with the `vendor-sdk-personalized` template (preset: salesforce-chat).
- * Real Salesforce exposes `embeddedservice_bootstrap.init(orgId, app, settings)`
+ * Pairs with the `vendor-sdk-personalized` template (preset: embedded-service-chat).
+ * Real embedded service SDKs expose `embeddedservice_bootstrap.init(orgId, app, settings)`
  * — we mirror that signature so generated templates can call it unchanged.
- *
- * The mock dispatches `cdx-vendor-sdk-ready` on load (the template listens for
- * it before calling `init`), records every init call, and shows the seeded
- * pre-chat fields in a badge so reviewers can eyeball that personalization
- * data is making it through.
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -31,17 +26,18 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb()
     var s = document.createElement('script')
-    var origin = mockPartnerScriptOrigin('/vendors/salesforce/embedded.js')
+    var origin = mockPartnerScriptOrigin('/vendors/embedded-service-chat/embedded.js')
     s.src = origin + '/vendors/_shared/mock-overlay.js'
     s.onload = cb
     document.head.appendChild(s)
   }
 
   loadOverlay(function () {
-    var badge = window.MockOverlay.create('Salesforce')
+    var partner = 'embedded-service-chat'
+    var badge = window.MockOverlay.create('Embedded Service')
     window.embeddedservice_bootstrap = window.embeddedservice_bootstrap || {}
     window.embeddedservice_bootstrap.init = function (orgId, app, settings) {
-      window.MockOverlay.recordCall('Salesforce', 'init', {
+      window.MockOverlay.recordCall(partner, 'init', {
         orgId: orgId,
         app: app,
         settings: settings || {},
@@ -50,7 +46,7 @@
       badge.update({userFullName: name, userGuid: orgId})
     }
 
-    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: 'salesforce'}}))
-    window.MockOverlay.recordCall('Salesforce', 'sdk-ready', {})
+    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: partner}}))
+    window.MockOverlay.recordCall(partner, 'sdk-ready', {})
   })
 })()

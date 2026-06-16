@@ -1,9 +1,10 @@
 /**
- * Mock Five9 chat plugin.
+ * Mock contact center chat plugin.
  *
- * Pairs with the `vendor-sdk-personalized` template (preset: five9). Real Five9
- * exposes `Five9ChatPlugin(config)` as a global function; we mirror that and
- * record the config (which carries the user identity from `dbk.sessionInfo()`).
+ * Pairs with the `vendor-sdk-personalized` template (preset: contact-center-chat).
+ * Real contact center SDKs expose `Five9ChatPlugin(config)` as a global function;
+ * we mirror that and record the config (which carries the user identity from
+ * `dbk.sessionInfo()`).
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -26,26 +27,27 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb()
     var s = document.createElement('script')
-    var origin = mockPartnerScriptOrigin('/vendors/five9/chat.js')
+    var origin = mockPartnerScriptOrigin('/vendors/contact-center-chat/chat.js')
     s.src = origin + '/vendors/_shared/mock-overlay.js'
     s.onload = cb
     document.head.appendChild(s)
   }
 
   loadOverlay(function () {
-    var badge = window.MockOverlay.create('Five9')
+    var partner = 'contact-center-chat'
+    var badge = window.MockOverlay.create('Contact Center')
     window.Five9ChatPlugin = function (config) {
-      window.MockOverlay.recordCall('Five9', 'init', config || {})
+      window.MockOverlay.recordCall(partner, 'init', config || {})
       var fields = (config && config.fields) || (window.PreChatFields || {})
       badge.update({userFullName: fields.name || '(anon)'})
       return {
         startChat: function () {
-          window.MockOverlay.recordCall('Five9', 'startChat', {})
+          window.MockOverlay.recordCall(partner, 'startChat', {})
         },
       }
     }
 
-    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: 'five9'}}))
-    window.MockOverlay.recordCall('Five9', 'sdk-ready', {})
+    window.dispatchEvent(new CustomEvent('cdx-vendor-sdk-ready', {detail: {vendor: partner}}))
+    window.MockOverlay.recordCall(partner, 'sdk-ready', {})
   })
 })()

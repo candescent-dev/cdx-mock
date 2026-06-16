@@ -1,8 +1,9 @@
 /**
- * Mock Link Live SDK.
+ * Mock script-with-config SDK.
  *
- * Pairs with the `vendor-script-with-config` template. The real Link Live
- * loader reads `window.NCR_LIVE_AGENT_CSS_URL` and `window.NCR_LIVE_AGENT_CONTENT_URL`
+ * Pairs with the `vendor-script-with-config` template (presets:
+ * script-config-retail, script-config-business). The real loader reads
+ * `window.NCR_LIVE_AGENT_CSS_URL` and `window.NCR_LIVE_AGENT_CONTENT_URL`
  * before bootstrapping. This mock honors the same globals so templates can
  * pass mock URLs and watch them actually be consumed.
  */
@@ -27,7 +28,7 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb();
     var s = document.createElement('script');
-    var origin = mockPartnerScriptOrigin('/vendors/link-live/aspect.js');
+    var origin = mockPartnerScriptOrigin('/vendors/script-config/aspect.js');
     s.src = origin + '/vendors/_shared/mock-overlay.js';
     s.onload = cb;
     document.head.appendChild(s);
@@ -42,17 +43,18 @@
   }
 
   loadOverlay(function () {
-    var badge = window.MockOverlay.create('Link Live');
+    var badge = window.MockOverlay.create('Script Config');
+    var partner = 'script-config';
     var cssUrl = window.NCR_LIVE_AGENT_CSS_URL;
     var contentUrl = window.NCR_LIVE_AGENT_CONTENT_URL;
     loadCss(cssUrl);
-    window.MockOverlay.recordCall('Link Live', 'auto-bootstrap', {
+    window.MockOverlay.recordCall(partner, 'auto-bootstrap', {
       cssUrl: cssUrl || null,
       contentUrl: contentUrl || null,
     });
 
     if (!contentUrl) {
-      badge.panel('Link Live (mock)', 'No NCR_LIVE_AGENT_CONTENT_URL set; nothing to load.');
+      badge.panel('Script Config (mock)', 'No NCR_LIVE_AGENT_CONTENT_URL set; nothing to load.');
       return;
     }
 
@@ -61,13 +63,13 @@
     iframe.height = '0';
     iframe.width = '0';
     iframe.style.cssText = 'position:absolute;left:-9999px;top:-9999px;border:0';
-    iframe.setAttribute('data-mock-link-live', '1');
+    iframe.setAttribute('data-mock-script-config', '1');
     document.body.appendChild(iframe);
 
     window.addEventListener('message', function (ev) {
       if (!ev.data || ev.data.source !== 'mock-sso-handoff') return;
-      window.MockOverlay.recordCall('Link Live', 'sso-handoff-received', ev.data);
-      badge.panel('Link Live SSO handoff', ev.data);
+      window.MockOverlay.recordCall(partner, 'sso-handoff-received', ev.data);
+      badge.panel('Script Config SSO handoff', ev.data);
     });
   });
 })();

@@ -3,9 +3,10 @@ import {mockPartnersBaseUrl} from '../lib/partner-port.js'
 
 /**
  * Mock content / config endpoint for the `vendor-script-with-config` template
- * (Link Live preset). The real per-tenant config is a JSON document that the
- * vendor SDK reads off `window.AspectConfigContent`. We return shape-correct
- * placeholders for `retail` and `business` flavors so previews work end-to-end.
+ * (`script-config-retail` / `script-config-business` presets). The real
+ * per-tenant config is a JSON document that the vendor SDK reads off
+ * `window.AspectConfigContent`. We return shape-correct placeholders for
+ * `retail` and `business` flavors so previews work end-to-end.
  */
 function variantPayload(variant: string): Record<string, unknown> | undefined {
   const base = mockPartnersBaseUrl()
@@ -43,8 +44,8 @@ function variantPayload(variant: string): Record<string, unknown> | undefined {
 
 const ALLOWED_VARIANTS = ['retail', 'business'] as const
 
-export async function registerLinkLiveHandoff(app: FastifyInstance) {
-  app.get<{Params: {variant: string}}>('/link-live/handoff/:variant', async (req, reply) => {
+export async function registerScriptConfigHandoff(app: FastifyInstance) {
+  app.get<{Params: {variant: string}}>('/script-config/handoff/:variant', async (req, reply) => {
     const variant = req.params.variant
     const payload = variantPayload(variant)
     if (!payload) {

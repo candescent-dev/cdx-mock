@@ -1,7 +1,7 @@
 {
   "name": "cdx-mock-partners",
   "version": "0.1.0",
-  "description": "Local mock HTTP server and static stubs for third-party partner scripts used with Candescent Forge aspect development (Glia, GTM, SSO handoffs, mobile JSBridge tokens, etc.)",
+  "description": "Local mock HTTP server and static stubs for partner integration scripts used with Candescent Forge aspect development (engagement loaders, tag manager, SSO handoffs, mobile JSBridge tokens, etc.)",
   "type": "module",
   "exports": {
     ".": "./server.ts"

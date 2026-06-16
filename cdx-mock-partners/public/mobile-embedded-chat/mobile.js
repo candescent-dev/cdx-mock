@@ -1,16 +1,14 @@
 /**
- * Mock Salesforce mobile chat SDK.
+ * Mock mobile embedded chat SDK (JSBridge).
  *
- * Pairs with the `mobile-vendor-chat-jsbridge` template (preset:
- * mobile-salesforce). Same shape as `ujet/mobile.js` — listens for
+ * Pairs with the `mobile-vendor-chat-jsbridge` template (preset: mobile-embedded-chat).
+ * Same shape as `mobile-chat-jsbridge/mobile.js` — listens for
  * `cdx-mobile-vendor-ready` and records the token + tenant.
- *
- * The template dispatches `cdx-mobile-vendor-ready` from script.onload, which
- * fires synchronously after this IIFE returns. We therefore register the
- * listener synchronously and defer only the visible overlay to async load.
  */
 (function () {
   var pending = []
+  var partner = 'mobile-embedded-chat'
+
   function record(vendor, fn, args) {
     if (window.MockOverlay) {
       window.MockOverlay.recordCall(vendor, fn, args)
@@ -21,7 +19,7 @@
 
   window.SalesforceMobileChat = {
     init: function (orgId, app, token) {
-      record('Salesforce-mobile', 'init', {orgId: orgId, app: app, hasToken: Boolean(token)})
+      record(partner, 'init', {orgId: orgId, app: app, hasToken: Boolean(token)})
     },
   }
 
@@ -50,15 +48,15 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb()
     var s = document.createElement('script')
-    var origin = mockPartnerScriptOrigin('/vendors/salesforce/mobile.js')
+    var origin = mockPartnerScriptOrigin('/vendors/mobile-embedded-chat/mobile.js')
     s.src = origin + '/vendors/_shared/mock-overlay.js'
     s.onload = cb
     document.head.appendChild(s)
   }
 
   loadOverlay(function () {
-    window.MockOverlay.create('Salesforce (mobile)')
-    window.MockOverlay.recordCall('Salesforce-mobile', 'sdk-loaded', {})
+    window.MockOverlay.create('Mobile Embedded')
+    window.MockOverlay.recordCall(partner, 'sdk-loaded', {})
     while (pending.length > 0) {
       var c = pending.shift()
       window.MockOverlay.recordCall(c[0], c[1], c[2])

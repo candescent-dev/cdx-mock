@@ -1,6 +1,6 @@
 /**
  * Effective listen port for the mock server (after bind) and base URLs for
- * `/vendors` catalog + Link Live JSON. Forge presets default to :4011; when
+ * `/vendors` catalog + script-config JSON. Forge presets default to :4011; when
  * that port is busy we advance and callers must use the URLs we advertise.
  */
 const DEFAULT_PORT = 4011
