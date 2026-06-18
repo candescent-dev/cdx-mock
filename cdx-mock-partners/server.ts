@@ -134,7 +134,7 @@ function listVendors(): VendorCatalogEntry[] {
         vendorScriptUrl: `${b}/vendors/embedded-service-chat/embedded.js`,
         vendorOrgId: '00DMOCKEMBEDDED0',
         vendorAppName: 'MockSupportApp',
-        vendorInitFn: 'embeddedservice_bootstrap.init',
+        vendorInitFn: 'mockEmbeddedChat.init',
       },
     },
     {
@@ -145,7 +145,7 @@ function listVendors(): VendorCatalogEntry[] {
       defaults: {
         vendorScriptUrl: `${b}/vendors/contact-center-chat/chat.js`,
         vendorAppName: 'MockSupportQueue',
-        vendorInitFn: 'Five9ChatPlugin',
+        vendorInitFn: 'mockContactCenter',
       },
     },
     {
@@ -156,7 +156,7 @@ function listVendors(): VendorCatalogEntry[] {
       defaults: {
         vendorScriptUrl: `${b}/vendors/cobrowse-chat/widget.js`,
         vendorAppName: 'mock-account',
-        vendorInitFn: 'AcquireApp.init',
+        vendorInitFn: 'mockCobrowse.init',
       },
     },
     {

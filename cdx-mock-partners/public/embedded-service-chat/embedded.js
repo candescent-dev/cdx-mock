@@ -2,8 +2,8 @@
  * Mock embedded service chat SDK.
  *
  * Pairs with the `vendor-sdk-personalized` template (preset: embedded-service-chat).
- * Real embedded service SDKs expose `embeddedservice_bootstrap.init(orgId, app, settings)`
- * — we mirror that signature so generated templates can call it unchanged.
+ * Exposes `mockEmbeddedChat.init(orgId, app, settings)` — same arity as production
+ * embedded-service chat SDKs so Forge-generated templates can call it unchanged.
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -35,8 +35,8 @@
   loadOverlay(function () {
     var partner = 'embedded-service-chat'
     var badge = window.MockOverlay.create('Embedded Service')
-    window.embeddedservice_bootstrap = window.embeddedservice_bootstrap || {}
-    window.embeddedservice_bootstrap.init = function (orgId, app, settings) {
+    window.mockEmbeddedChat = window.mockEmbeddedChat || {}
+    window.mockEmbeddedChat.init = function (orgId, app, settings) {
       window.MockOverlay.recordCall(partner, 'init', {
         orgId: orgId,
         app: app,

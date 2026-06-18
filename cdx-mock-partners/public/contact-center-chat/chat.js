@@ -2,9 +2,8 @@
  * Mock contact center chat plugin.
  *
  * Pairs with the `vendor-sdk-personalized` template (preset: contact-center-chat).
- * Real contact center SDKs expose `Five9ChatPlugin(config)` as a global function;
- * we mirror that and record the config (which carries the user identity from
- * `dbk.sessionInfo()`).
+ * Exposes `mockContactCenter(config)` as a global function and records the config
+ * (which carries the user identity from `dbk.sessionInfo()`).
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -36,7 +35,7 @@
   loadOverlay(function () {
     var partner = 'contact-center-chat'
     var badge = window.MockOverlay.create('Contact Center')
-    window.Five9ChatPlugin = function (config) {
+    window.mockContactCenter = function (config) {
       window.MockOverlay.recordCall(partner, 'init', config || {})
       var fields = (config && config.fields) || (window.PreChatFields || {})
       badge.update({userFullName: fields.name || '(anon)'})

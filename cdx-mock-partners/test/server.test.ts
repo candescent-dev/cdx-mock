@@ -71,23 +71,23 @@ describe('cdx-mock-partners', () => {
     expect(resp.body).toContain('mock_tag_manager_loaded')
   })
 
-  it('serves the embedded service mock SDK with embeddedservice_bootstrap.init', async () => {
+  it('serves the embedded service mock SDK with mockEmbeddedChat.init', async () => {
     const resp = await app.inject({method: 'GET', url: '/vendors/embedded-service-chat/embedded.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('embeddedservice_bootstrap')
+    expect(resp.body).toContain('mockEmbeddedChat.init')
     expect(resp.body).toContain('cdx-vendor-sdk-ready')
   })
 
-  it('serves the contact center mock SDK exposing Five9ChatPlugin', async () => {
+  it('serves the contact center mock SDK exposing mockContactCenter', async () => {
     const resp = await app.inject({method: 'GET', url: '/vendors/contact-center-chat/chat.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('Five9ChatPlugin')
+    expect(resp.body).toContain('mockContactCenter')
   })
 
-  it('serves the co-browse mock SDK exposing AcquireApp.init', async () => {
+  it('serves the co-browse mock SDK exposing mockCobrowse.init', async () => {
     const resp = await app.inject({method: 'GET', url: '/vendors/cobrowse-chat/widget.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('AcquireApp.init')
+    expect(resp.body).toContain('mockCobrowse.init')
   })
 
   it('serves the mobile chat mock SDK that listens for cdx-mobile-vendor-ready', async () => {

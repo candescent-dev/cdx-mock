@@ -2,7 +2,7 @@
  * Mock co-browse chat SDK.
  *
  * Pairs with the `vendor-sdk-personalized` template (preset: cobrowse-chat).
- * Real co-browse SDKs expose `AcquireApp.init(account, options)` — we mirror that.
+ * Exposes `mockCobrowse.init(account, options)` — we mirror that.
  */
 (function () {
   function mockPartnerScriptOrigin(pathFragment) {
@@ -34,8 +34,8 @@
   loadOverlay(function () {
     var partner = 'cobrowse-chat'
     var badge = window.MockOverlay.create('Co-browse Chat')
-    window.AcquireApp = window.AcquireApp || {}
-    window.AcquireApp.init = function (account, options) {
+    window.mockCobrowse = window.mockCobrowse || {}
+    window.mockCobrowse.init = function (account, options) {
       window.MockOverlay.recordCall(partner, 'init', {account: account, options: options || {}})
       var name = (options && options.name) || (window.PreChatFields && window.PreChatFields.name) || ''
       badge.update({userFullName: name})

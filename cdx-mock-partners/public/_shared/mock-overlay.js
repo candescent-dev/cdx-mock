@@ -182,14 +182,14 @@
       'Contact Center': {
         title: 'Contact center chat — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569"><code>Five9ChatPlugin</code> receives queue + pre-chat fields, then the visitor taps to start a queue session.</p>',
+          '<p style="margin:0 0 10px;color:#475569"><code>mockContactCenter</code> receives queue + pre-chat fields, then the visitor taps to start a queue session.</p>',
         actions:
           '<button type="button" data-mock-simulate="contact-center-start" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: startChat()</button>',
       },
       'Embedded Service': {
         title: 'Embedded service chat — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569"><code>embeddedservice_bootstrap.init</code> registers org + deployment; pre-chat fields personalize routing and screen-pop.</p>',
+          '<p style="margin:0 0 10px;color:#475569"><code>mockEmbeddedChat.init</code> registers org + deployment; pre-chat fields personalize routing and screen-pop.</p>',
         actions:
           '<button type="button" data-mock-simulate="embedded-open" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: open embedded chat</button>',
       },
@@ -256,8 +256,8 @@
     }
     if (action === 'contact-center-start') {
       try {
-        if (typeof window.Five9ChatPlugin === 'function') {
-          var inst = window.Five9ChatPlugin({ fields: window.PreChatFields || {} });
+        if (typeof window.mockContactCenter === 'function') {
+          var inst = window.mockContactCenter({ fields: window.PreChatFields || {} });
           if (inst && typeof inst.startChat === 'function') inst.startChat();
         } else {
           recordCall('contact-center-chat', 'startChat', { source: 'mock-panel-fallback' });
