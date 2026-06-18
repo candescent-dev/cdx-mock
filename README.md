@@ -39,9 +39,9 @@ cd cdx-mock/cdx-mock-partners && pnpm install && pnpm start
 
 The Forge CLI defaults to `http://localhost:4010` and `http://localhost:4011` when creating widgets and previewing aspects. On preview, **`forge`** can clone this repository to `~/.forge/cdx-mock` and start the required mock automatically (disable with `FORGE_SKIP_MOCK_AUTO_START=1`).
 
-## Third-party names
+## Mock partner integrations
 
-Partner mocks reference vendor product names (e.g. Glia, Salesforce, Five9, UJET, Google Tag Manager) only to simulate integration shapes for local development. They are **unofficial stubs**, not affiliated with or endorsed by those vendors, and do not include proprietary SDK code.
+Partner mocks use generic preset ids and simulate common integration API shapes for local development. They are **unofficial stubs**, not affiliated with any third-party vendor, and do not include proprietary SDK code.
 
 ## License
 

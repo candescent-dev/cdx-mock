@@ -1,10 +1,10 @@
 /**
- * Mock Glia chat-bubble SDK.
+ * Mock engagement script loader SDK.
  *
- * Pairs with the `vendor-script-loader` template. The real SDK is a single
- * script that auto-bootstraps on load and exposes a small global API. This
- * mock mirrors that surface (auto-bootstrap + identifiable badge) and records
- * every call into `window.__mockPartnerCalls` for e2e assertions.
+ * Pairs with the `vendor-script-loader` template (preset: engagement-script-loader).
+ * The real SDK is a single script that auto-bootstraps on load and exposes a small
+ * global API. This mock mirrors that surface (auto-bootstrap + identifiable badge)
+ * and records every call into `window.__mockPartnerCalls` for e2e assertions.
  */
 (function () {
   /**
@@ -29,7 +29,7 @@
     return '';
   }
 
-  var SDK_ORIGIN = mockPartnerScriptOrigin('/vendors/glia/sdk.js');
+  var SDK_ORIGIN = mockPartnerScriptOrigin('/vendors/engagement-script-loader/sdk.js');
 
   function loadCss(href) {
     if (!href) return;
@@ -45,40 +45,41 @@
     s.src = SDK_ORIGIN + '/vendors/_shared/mock-overlay.js';
     s.onload = cb;
     s.onerror = function () {
-      console.warn('[mock-glia] failed to load mock-overlay.js — check cdx-mock-partners is running:', s.src);
+      console.warn('[mock-engagement-script-loader] failed to load mock-overlay.js — check cdx-mock-partners is running:', s.src);
     };
     document.head.appendChild(s);
   }
 
   loadOverlay(function () {
-    loadCss(SDK_ORIGIN + '/vendors/glia/sdk.css');
+    loadCss(SDK_ORIGIN + '/vendors/engagement-script-loader/sdk.css');
 
-    var badge = window.MockOverlay.create('Glia');
+    var badge = window.MockOverlay.create('Engagement Script');
+    var partner = 'engagement-script-loader';
 
-    if (!document.querySelector('[data-mock-glia-bubble]')) {
+    if (!document.querySelector('[data-mock-engagement-bubble]')) {
       var bubble = document.createElement('button');
       bubble.type = 'button';
-      bubble.setAttribute('data-mock-glia-bubble', '');
-      bubble.setAttribute('aria-label', 'Mock Glia chat launcher');
-      bubble.textContent = 'G';
+      bubble.setAttribute('data-mock-engagement-bubble', '');
+      bubble.setAttribute('aria-label', 'Mock engagement chat launcher');
+      bubble.textContent = 'E';
       bubble.addEventListener('click', function () {
-        window.MockOverlay.recordCall('Glia', 'launcher-click', {});
+        window.MockOverlay.recordCall(partner, 'launcher-click', {});
         badge.update({ lastInteraction: 'launcher' });
       });
       document.body.appendChild(bubble);
     }
 
-    window.MockOverlay.recordCall('Glia', 'auto-bootstrap', {
+    window.MockOverlay.recordCall(partner, 'auto-bootstrap', {
       stagingFlag: window.NCR_LIVE_AGENT_IS_GLIA_STAGING_SITE === true,
     });
 
-    window.GliaMock = {
+    window.EngagementScriptMock = {
       init: function (opts) {
-        window.MockOverlay.recordCall('Glia', 'init', opts || {});
+        window.MockOverlay.recordCall(partner, 'init', opts || {});
         badge.update(opts || {});
       },
       identify: function (user) {
-        window.MockOverlay.recordCall('Glia', 'identify', user || {});
+        window.MockOverlay.recordCall(partner, 'identify', user || {});
         badge.update(user || {});
       },
     };

@@ -1,6 +1,6 @@
-/* Mock Link Live stylesheet — proves the CSS URL global was consumed by the loader. */
+/* Mock script-with-config stylesheet — proves the CSS URL global was consumed by the loader. */
 body::after {
-  content: 'mock link-live css loaded';
+  content: 'mock script-config css loaded';
   position: fixed;
   bottom: 4px;
   left: 4px;

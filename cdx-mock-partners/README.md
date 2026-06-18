@@ -6,7 +6,7 @@ Forge aspect presets point at `http://localhost:4011/…`. If this server binds 
 
 All data is **synthetic**. The server listens on **`127.0.0.1`** only.
 
-Partner mocks reference vendor product names (Glia, Salesforce, Five9, UJET, Google Tag Manager, etc.) only to simulate integration APIs for local development. They are **unofficial stubs**, not affiliated with those vendors, and do not ship proprietary SDK code.
+Partner mocks use generic integration labels and simulate common vendor API shapes for local development. They are **unofficial stubs**, not affiliated with any third-party vendor, and do not ship proprietary SDK code.
 
 Part of the [**cdx-mock**](https://github.com/candescent-dev/cdx-mock) repository. See also [`cdx-mock-data-apis`](../cdx-mock-data-apis) (`:4010`).
 
@@ -34,11 +34,11 @@ pnpm start
 | `MOCK_PARTNERS_STRICT_PORT` | off | Exit on `EADDRINUSE` instead of scanning the next ports |
 | `LOG_LEVEL` | `info` | Fastify log level |
 
-Unless **`MOCK_PARTNERS_STRICT_PORT=1`**, the server tries ports **`MOCK_PARTNERS_PORT` … +63** on `127.0.0.1` until one is free. **`GET /vendors`** and Link Live JSON reflect the bound port.
+Unless **`MOCK_PARTNERS_STRICT_PORT=1`**, the server tries ports **`MOCK_PARTNERS_PORT` … +63** on `127.0.0.1` until one is free. **`GET /vendors`** and script-config handoff JSON reflect the bound port.
 
 ### MOCK pill missing in Forge preview
 
-Partner SDKs are usually injected with **`async`**, so **`document.currentScript` is `null`**. Guessing the script URL from `document.scripts` can select the wrong script (e.g. Forge preview `/aspect.js` on `:3456`). The mocks then load `mock-overlay.js` from the preview origin instead of the mock server, and the **MOCK · …** badge does not appear. Bundled SDKs locate their own path (e.g. `/vendors/glia/sdk.js`) to resolve the correct origin.
+Partner SDKs are usually injected with **`async`**, so **`document.currentScript` is `null`**. Guessing the script URL from `document.scripts` can select the wrong script (e.g. Forge preview `/aspect.js` on `:3456`). The mocks then load `mock-overlay.js` from the preview origin instead of the mock server, and the **MOCK · …** badge does not appear. Bundled SDKs locate their own path (e.g. `/vendors/engagement-script-loader/sdk.js`) to resolve the correct origin.
 
 ### Port already in use
 
@@ -70,7 +70,7 @@ You can also set **`FORGE_CLI_DIST`** to any directory that already contains `te
 | `POST /token` | Fake JSBridge token for mobile templates |
 | `GET /auth/authorize?...` | OIDC-toolkit-shaped mock |
 | `GET /help` | Help page for floating-action-button |
-| `GET /link-live/handoff/:variant` | JSON config for Link Live presets |
+| `GET /script-config/handoff/:variant` | JSON config for script-config retail/business presets |
 | `GET /gallery`, `GET /gallery/run/...` | Template × preset runner (requires Forge CLI install) |
 
 ## Programmatic use
@@ -90,7 +90,7 @@ setPartnerListenPort(port)
 2. Show a **MOCK · \<vendor\>** badge via `public/_shared/mock-overlay.js`.
 3. Record calls on `window.__mockPartnerCalls` for local testing.
 
-Vendor ids and template pairings are listed in `server.ts` (`listVendors()`).
+Vendor catalog ids align with Forge aspect preset ids (`engagement-script-loader`, `script-config-retail`, etc.) and are listed in `server.ts` (`listVendors()`).
 
 ## License
 

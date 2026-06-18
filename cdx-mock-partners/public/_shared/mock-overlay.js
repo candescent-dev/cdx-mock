@@ -1,8 +1,8 @@
 /**
  * Shared helper for every mock vendor SDK.
  *
- *   const badge = MockOverlay.create('Glia');
- *   MockOverlay.recordCall('Glia', 'init', { userGuid: '...' });
+ *   const badge = MockOverlay.create('Engagement Script');
+ *   MockOverlay.recordCall('engagement-script-loader', 'init', { userGuid: '...' });
  *   badge.update({ userFullName: '...' });
  *   badge.panel('Title', payload);  // optional programmatic panel body
  *
@@ -65,14 +65,14 @@
 
   /** Map badge label (2nd arg to create) → partner keys used in recordCall(). */
   var PARTNER_CALL_KEYS = {
-    'Glia': ['Glia'],
-    'Link Live': ['Link Live'],
-    'GTM': ['GTM'],
-    'Acquire': ['Acquire'],
-    'Five9': ['Five9'],
-    'Salesforce': ['Salesforce'],
-    'UJET (mobile)': ['UJET'],
-    'Salesforce (mobile)': ['Salesforce-mobile'],
+    'Engagement Script': ['engagement-script-loader'],
+    'Script Config': ['script-config', 'script-config-retail', 'script-config-business'],
+    'Tag Manager': ['tag-manager-mock'],
+    'Co-browse Chat': ['cobrowse-chat'],
+    'Contact Center': ['contact-center-chat'],
+    'Embedded Service': ['embedded-service-chat'],
+    'Mobile Chat': ['mobile-chat-jsbridge'],
+    'Mobile Embedded': ['mobile-embedded-chat'],
   };
 
   function callKeysForBadge(vendor) {
@@ -146,66 +146,66 @@
 
   function playbookHtml(vendor) {
     var blocks = {
-      'Glia': {
-        title: 'Glia — what happens in production',
+      'Engagement Script': {
+        title: 'Engagement script loader — what happens in production',
         body:
           '<p style="margin:0 0 10px;color:#475569">The real SDK mounts a launcher and chat UI. Visitors tap to start a session; the bank may pass identity from <code>dbk.sessionInfo()</code> for routing.</p>' +
           '<p style="margin:0 0 10px;color:#475569"><strong>In this mock:</strong> the pill only proves the script loaded. Use the buttons below to append fake vendor calls the way a real widget would after user action.</p>',
         actions:
-          '<button type="button" data-mock-simulate="glia-init" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: open launcher</button>' +
-          '<button type="button" data-mock-simulate="glia-identify" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: identify visitor</button>',
+          '<button type="button" data-mock-simulate="engagement-init" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: open launcher</button>' +
+          '<button type="button" data-mock-simulate="engagement-identify" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: identify visitor</button>',
       },
-      'Link Live': {
-        title: 'Link Live — what happens in production',
+      'Script Config': {
+        title: 'Script-with-config chat — what happens in production',
         body:
           '<p style="margin:0 0 10px;color:#475569">Retail / business chat loads CSS + config, embeds a hidden SSO iframe, then receives a token via <code>postMessage</code> to attach the authenticated widget.</p>' +
           '<p style="margin:0 0 10px;color:#475569"><strong>In this mock:</strong> when the handoff iframe completes, this panel can also show the payload (see programmatic <code>badge.panel</code> from the SDK).</p>',
         actions:
-          '<button type="button" data-mock-simulate="linklive-engage" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: widget engaged</button>',
+          '<button type="button" data-mock-simulate="script-config-engage" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: widget engaged</button>',
       },
-      'GTM': {
-        title: 'Google Tag Manager — what happens in production',
+      'Tag Manager': {
+        title: 'Tag manager — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569">GTM injects the container bootstrap; tags fire on <code>dataLayer.push</code> events (page views, conversions, marketing pixels).</p>' +
+          '<p style="margin:0 0 10px;color:#475569">The tag manager injects the container bootstrap; tags fire on <code>dataLayer.push</code> events (page views, conversions, marketing pixels).</p>' +
           '<p style="margin:0 0 10px;color:#475569"><strong>In this mock:</strong> pushes are recorded on the call log.</p>',
         actions:
-          '<button type="button" data-mock-simulate="gtm-pageview" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: page_view</button>' +
-          '<button type="button" data-mock-simulate="gtm-conv" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: conversion</button>',
+          '<button type="button" data-mock-simulate="tag-pageview" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: page_view</button>' +
+          '<button type="button" data-mock-simulate="tag-conv" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: conversion</button>',
       },
-      'Acquire': {
-        title: 'Acquire — what happens in production',
+      'Co-browse Chat': {
+        title: 'Co-browse chat — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569">Acquire boots co-browse / chat with your account id; agents may escalate or take control per vendor rules.</p>',
+          '<p style="margin:0 0 10px;color:#475569">The co-browse SDK boots chat with your account id; agents may escalate or take control per vendor rules.</p>',
         actions:
-          '<button type="button" data-mock-simulate="acquire-session" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: session requested</button>',
+          '<button type="button" data-mock-simulate="cobrowse-session" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: session requested</button>',
       },
-      'Five9': {
-        title: 'Five9 — what happens in production',
+      'Contact Center': {
+        title: 'Contact center chat — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569"><code>Five9ChatPlugin</code> receives queue + pre-chat fields, then the visitor taps to start a queue session.</p>',
+          '<p style="margin:0 0 10px;color:#475569"><code>mockContactCenter</code> receives queue + pre-chat fields, then the visitor taps to start a queue session.</p>',
         actions:
-          '<button type="button" data-mock-simulate="five9-start" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: startChat()</button>',
+          '<button type="button" data-mock-simulate="contact-center-start" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: startChat()</button>',
       },
-      'Salesforce': {
-        title: 'Salesforce Embedded Service — what happens in production',
+      'Embedded Service': {
+        title: 'Embedded service chat — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569"><code>embeddedservice_bootstrap.init</code> registers org + deployment; pre-chat fields personalize routing and screen-pop.</p>',
+          '<p style="margin:0 0 10px;color:#475569"><code>mockEmbeddedChat.init</code> registers org + deployment; pre-chat fields personalize routing and screen-pop.</p>',
         actions:
-          '<button type="button" data-mock-simulate="sf-open" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: open embedded chat</button>',
+          '<button type="button" data-mock-simulate="embedded-open" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: open embedded chat</button>',
       },
-      'UJET (mobile)': {
-        title: 'UJET (mobile) — what happens in production',
+      'Mobile Chat': {
+        title: 'Mobile chat (JSBridge) — what happens in production',
         body:
-          '<p style="margin:0 0 10px;color:#475569">The native app passes a token via JSBridge; the WebView loads UJET and calls <code>UJETMobile.bootstrap</code> with tenant + token.</p>',
+          '<p style="margin:0 0 10px;color:#475569">The native app passes a token via JSBridge; the WebView loads the vendor SDK and calls <code>UJETMobile.bootstrap</code> with tenant + token.</p>',
         actions:
-          '<button type="button" data-mock-simulate="ujet-boot" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: bootstrap again</button>',
+          '<button type="button" data-mock-simulate="mobile-chat-boot" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: bootstrap again</button>',
       },
-      'Salesforce (mobile)': {
-        title: 'Salesforce mobile chat — what happens in production',
+      'Mobile Embedded': {
+        title: 'Mobile embedded chat — what happens in production',
         body:
           '<p style="margin:0 0 10px;color:#475569">Same as web embedded chat but entry is <code>SalesforceMobileChat.init(org, app, token)</code> after the bridge returns credentials.</p>',
         actions:
-          '<button type="button" data-mock-simulate="sfm-init" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: init again</button>',
+          '<button type="button" data-mock-simulate="mobile-embedded-init" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;font:inherit">Simulate: init again</button>',
       },
     };
     var pb = blocks[vendor];
@@ -228,56 +228,56 @@
   }
 
   function runSimulate(vendor, action) {
-    if (action === 'glia-init' && window.GliaMock && typeof window.GliaMock.init === 'function') {
-      window.GliaMock.init({ mockPreview: true });
-    } else if (action === 'glia-init') {
-      recordCall('Glia', 'simulate-open-launcher', { source: 'mock-panel' });
+    if (action === 'engagement-init' && window.EngagementScriptMock && typeof window.EngagementScriptMock.init === 'function') {
+      window.EngagementScriptMock.init({ mockPreview: true });
+    } else if (action === 'engagement-init') {
+      recordCall('engagement-script-loader', 'simulate-open-launcher', { source: 'mock-panel' });
     }
-    if (action === 'glia-identify' && window.GliaMock && typeof window.GliaMock.identify === 'function') {
-      window.GliaMock.identify({ userFullName: 'Preview User', source: 'mock-panel' });
-    } else if (action === 'glia-identify') {
-      recordCall('Glia', 'simulate-identify', { userFullName: 'Preview User' });
+    if (action === 'engagement-identify' && window.EngagementScriptMock && typeof window.EngagementScriptMock.identify === 'function') {
+      window.EngagementScriptMock.identify({ userFullName: 'Preview User', source: 'mock-panel' });
+    } else if (action === 'engagement-identify') {
+      recordCall('engagement-script-loader', 'simulate-identify', { userFullName: 'Preview User' });
     }
-    if (action === 'linklive-engage') {
-      recordCall('Link Live', 'simulate-widget-engaged', { source: 'mock-panel' });
+    if (action === 'script-config-engage') {
+      recordCall('script-config', 'simulate-widget-engaged', { source: 'mock-panel' });
     }
-    if (action === 'gtm-pageview') {
+    if (action === 'tag-pageview') {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'mock_page_view', source: 'mock-panel' });
-      recordCall('GTM', 'dataLayer.push', { event: 'mock_page_view' });
+      recordCall('tag-manager-mock', 'dataLayer.push', { event: 'mock_page_view' });
     }
-    if (action === 'gtm-conv') {
+    if (action === 'tag-conv') {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'mock_conversion', source: 'mock-panel' });
-      recordCall('GTM', 'dataLayer.push', { event: 'mock_conversion' });
+      recordCall('tag-manager-mock', 'dataLayer.push', { event: 'mock_conversion' });
     }
-    if (action === 'acquire-session') {
-      recordCall('Acquire', 'simulate-session-request', { source: 'mock-panel' });
+    if (action === 'cobrowse-session') {
+      recordCall('cobrowse-chat', 'simulate-session-request', { source: 'mock-panel' });
     }
-    if (action === 'five9-start') {
+    if (action === 'contact-center-start') {
       try {
-        if (typeof window.Five9ChatPlugin === 'function') {
-          var inst = window.Five9ChatPlugin({ fields: window.PreChatFields || {} });
+        if (typeof window.mockContactCenter === 'function') {
+          var inst = window.mockContactCenter({ fields: window.PreChatFields || {} });
           if (inst && typeof inst.startChat === 'function') inst.startChat();
         } else {
-          recordCall('Five9', 'startChat', { source: 'mock-panel-fallback' });
+          recordCall('contact-center-chat', 'startChat', { source: 'mock-panel-fallback' });
         }
       } catch (e) {
-        recordCall('Five9', 'startChat-error', { message: String(e && e.message ? e.message : e) });
+        recordCall('contact-center-chat', 'startChat-error', { message: String(e && e.message ? e.message : e) });
       }
     }
-    if (action === 'sf-open') {
-      recordCall('Salesforce', 'simulate-open-embedded-chat', { source: 'mock-panel' });
+    if (action === 'embedded-open') {
+      recordCall('embedded-service-chat', 'simulate-open-embedded-chat', { source: 'mock-panel' });
     }
-    if (action === 'ujet-boot' && window.UJETMobile && typeof window.UJETMobile.bootstrap === 'function') {
+    if (action === 'mobile-chat-boot' && window.UJETMobile && typeof window.UJETMobile.bootstrap === 'function') {
       window.UJETMobile.bootstrap({ source: 'mock-panel-replay', token: '(preview)' });
-    } else if (action === 'ujet-boot') {
-      recordCall('UJET', 'simulate-bootstrap', { source: 'mock-panel' });
+    } else if (action === 'mobile-chat-boot') {
+      recordCall('mobile-chat-jsbridge', 'simulate-bootstrap', { source: 'mock-panel' });
     }
-    if (action === 'sfm-init' && window.SalesforceMobileChat && typeof window.SalesforceMobileChat.init === 'function') {
+    if (action === 'mobile-embedded-init' && window.SalesforceMobileChat && typeof window.SalesforceMobileChat.init === 'function') {
       window.SalesforceMobileChat.init(window.VendorOrgId || '00DMOCK', window.VendorAppName || 'mock', window.VendorAuthToken || '(preview)');
-    } else if (action === 'sfm-init') {
-      recordCall('Salesforce-mobile', 'simulate-init', { source: 'mock-panel' });
+    } else if (action === 'mobile-embedded-init') {
+      recordCall('mobile-embedded-chat', 'simulate-init', { source: 'mock-panel' });
     }
   }
 

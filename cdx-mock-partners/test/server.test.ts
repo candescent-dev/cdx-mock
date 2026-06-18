@@ -27,27 +27,28 @@ describe('cdx-mock-partners', () => {
     const list = resp.json() as Array<{id: string; templateId: string}>
     const byId = (id: string) => list.find((v) => v.id === id)
 
-    expect(byId('glia')).toMatchObject({templateId: 'vendor-script-loader'})
-    expect(byId('link-live')).toMatchObject({templateId: 'vendor-script-with-config'})
-    expect(byId('gtm')).toMatchObject({templateId: 'tag-manager'})
-    expect(byId('salesforce')).toMatchObject({templateId: 'vendor-sdk-personalized'})
-    expect(byId('five9')).toMatchObject({templateId: 'vendor-sdk-personalized'})
-    expect(byId('acquire')).toMatchObject({templateId: 'vendor-sdk-personalized'})
-    expect(byId('ujet-mobile')).toMatchObject({templateId: 'mobile-vendor-chat-jsbridge'})
-    expect(byId('salesforce-mobile')).toMatchObject({templateId: 'mobile-vendor-chat-jsbridge'})
+    expect(byId('engagement-script-loader')).toMatchObject({templateId: 'vendor-script-loader'})
+    expect(byId('script-config-retail')).toMatchObject({templateId: 'vendor-script-with-config'})
+    expect(byId('script-config-business')).toMatchObject({templateId: 'vendor-script-with-config'})
+    expect(byId('tag-manager-mock')).toMatchObject({templateId: 'tag-manager'})
+    expect(byId('embedded-service-chat')).toMatchObject({templateId: 'vendor-sdk-personalized'})
+    expect(byId('contact-center-chat')).toMatchObject({templateId: 'vendor-sdk-personalized'})
+    expect(byId('cobrowse-chat')).toMatchObject({templateId: 'vendor-sdk-personalized'})
+    expect(byId('mobile-chat-jsbridge')).toMatchObject({templateId: 'mobile-vendor-chat-jsbridge'})
+    expect(byId('mobile-embedded-chat')).toMatchObject({templateId: 'mobile-vendor-chat-jsbridge'})
     expect(byId('offers-widget')).toMatchObject({templateId: 'vendor-iframe-modal'})
     expect(byId('offers-widget-mobile')).toMatchObject({templateId: 'mobile-vendor-iframe-modal'})
   })
 
-  it('serves the Glia mock SDK as JS', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/glia/sdk.js'})
+  it('serves the engagement script loader mock SDK as JS', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/engagement-script-loader/sdk.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('GliaMock')
-    expect(resp.body).toContain("window.MockOverlay.create('Glia')")
+    expect(resp.body).toContain('EngagementScriptMock')
+    expect(resp.body).toContain("window.MockOverlay.create('Engagement Script')")
   })
 
-  it('serves the Link Live mock SDK as JS', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/link-live/aspect.js'})
+  it('serves the script-with-config mock SDK as JS', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/script-config/aspect.js'})
     expect(resp.statusCode).toBe(200)
     expect(resp.body).toContain('NCR_LIVE_AGENT_CSS_URL')
     expect(resp.body).toContain('NCR_LIVE_AGENT_CONTENT_URL')
@@ -62,42 +63,42 @@ describe('cdx-mock-partners', () => {
     expect(resp.body).toContain('MOCK_SSO_TOKEN_')
   })
 
-  it('serves the GTM mock SDK', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/gtm/gtm.js'})
+  it('serves the tag manager mock SDK', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/tag-manager-mock/gtm.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain("MockOverlay.create('GTM')")
+    expect(resp.body).toContain("MockOverlay.create('Tag Manager')")
     expect(resp.body).toContain('window.dataLayer')
-    expect(resp.body).toContain('mock_gtm_loaded')
+    expect(resp.body).toContain('mock_tag_manager_loaded')
   })
 
-  it('serves the Salesforce embedded mock SDK with embeddedservice_bootstrap.init', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/salesforce/embedded.js'})
+  it('serves the embedded service mock SDK with mockEmbeddedChat.init', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/embedded-service-chat/embedded.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('embeddedservice_bootstrap')
+    expect(resp.body).toContain('mockEmbeddedChat.init')
     expect(resp.body).toContain('cdx-vendor-sdk-ready')
   })
 
-  it('serves the Five9 mock SDK exposing Five9ChatPlugin', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/five9/chat.js'})
+  it('serves the contact center mock SDK exposing mockContactCenter', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/contact-center-chat/chat.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('Five9ChatPlugin')
+    expect(resp.body).toContain('mockContactCenter')
   })
 
-  it('serves the Acquire mock SDK exposing AcquireApp.init', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/acquire/widget.js'})
+  it('serves the co-browse mock SDK exposing mockCobrowse.init', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/cobrowse-chat/widget.js'})
     expect(resp.statusCode).toBe(200)
-    expect(resp.body).toContain('AcquireApp.init')
+    expect(resp.body).toContain('mockCobrowse.init')
   })
 
-  it('serves the UJET mobile mock SDK that listens for cdx-mobile-vendor-ready', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/ujet/mobile.js'})
+  it('serves the mobile chat mock SDK that listens for cdx-mobile-vendor-ready', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/mobile-chat-jsbridge/mobile.js'})
     expect(resp.statusCode).toBe(200)
     expect(resp.body).toContain('UJETMobile')
     expect(resp.body).toContain('cdx-mobile-vendor-ready')
   })
 
-  it('serves the Salesforce mobile mock SDK that listens for cdx-mobile-vendor-ready', async () => {
-    const resp = await app.inject({method: 'GET', url: '/vendors/salesforce/mobile.js'})
+  it('serves the mobile embedded mock SDK that listens for cdx-mobile-vendor-ready', async () => {
+    const resp = await app.inject({method: 'GET', url: '/vendors/mobile-embedded-chat/mobile.js'})
     expect(resp.statusCode).toBe(200)
     expect(resp.body).toContain('SalesforceMobileChat')
     expect(resp.body).toContain('cdx-mobile-vendor-ready')
@@ -115,20 +116,20 @@ describe('cdx-mock-partners', () => {
     expect(resp.body).toContain('Help center')
   })
 
-  it('returns retail and business JSON config for /link-live/handoff/:variant', async () => {
-    const retail = await app.inject({method: 'GET', url: '/link-live/handoff/retail'})
+  it('returns retail and business JSON config for /script-config/handoff/:variant', async () => {
+    const retail = await app.inject({method: 'GET', url: '/script-config/handoff/retail'})
     expect(retail.statusCode).toBe(200)
     const retailBody = retail.json() as {flavor: string; features: {coBrowse: boolean}}
     expect(retailBody.flavor).toBe('retail')
     expect(retailBody.features.coBrowse).toBe(false)
 
-    const business = await app.inject({method: 'GET', url: '/link-live/handoff/business'})
+    const business = await app.inject({method: 'GET', url: '/script-config/handoff/business'})
     expect(business.statusCode).toBe(200)
     const businessBody = business.json() as {flavor: string; features: {coBrowse: boolean}}
     expect(businessBody.flavor).toBe('business')
     expect(businessBody.features.coBrowse).toBe(true)
 
-    const unknown = await app.inject({method: 'GET', url: '/link-live/handoff/personal'})
+    const unknown = await app.inject({method: 'GET', url: '/script-config/handoff/personal'})
     expect(unknown.statusCode).toBe(404)
   })
 

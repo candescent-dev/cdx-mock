@@ -1,19 +1,15 @@
 /**
- * Mock UJET mobile chat SDK.
+ * Mock mobile chat SDK (JSBridge).
  *
- * Pairs with the `mobile-vendor-chat-jsbridge` template (preset: mobile-ujet).
+ * Pairs with the `mobile-vendor-chat-jsbridge` template (preset: mobile-chat-jsbridge).
  * The template fetches a token via JSBridge (or falls back to /token) and then
  * loads this script. Once loaded, the template fires `cdx-mobile-vendor-ready`
  * which our mock listens for and records.
- *
- * IMPORTANT: the template dispatches `cdx-mobile-vendor-ready` from
- * `script.onload`, which fires synchronously after this IIFE returns. To avoid
- * a race, we register the listener and stub `UJETMobile` synchronously, and
- * defer only the visible badge/recording overlay to a follow-up async load.
  */
 (function () {
-  // Buffer calls until the overlay is ready so nothing is lost in the race.
   var pending = []
+  var partner = 'mobile-chat-jsbridge'
+
   function record(vendor, fn, args) {
     if (window.MockOverlay) {
       window.MockOverlay.recordCall(vendor, fn, args)
@@ -25,14 +21,14 @@
   window.UJETMobile = {
     ready: false,
     bootstrap: function (config) {
-      record('UJET', 'bootstrap', config || {})
+      record(partner, 'bootstrap', config || {})
       this.ready = true
     },
   }
 
   window.addEventListener('cdx-mobile-vendor-ready', function (event) {
     var detail = (event && event.detail) || {}
-    record('UJET', 'sdk-ready', {
+    record(partner, 'sdk-ready', {
       app: detail.app,
       org: detail.org,
       source: detail.source,
@@ -61,16 +57,15 @@
   function loadOverlay(cb) {
     if (window.MockOverlay) return cb()
     var s = document.createElement('script')
-    var origin = mockPartnerScriptOrigin('/vendors/ujet/mobile.js')
+    var origin = mockPartnerScriptOrigin('/vendors/mobile-chat-jsbridge/mobile.js')
     s.src = origin + '/vendors/_shared/mock-overlay.js'
     s.onload = cb
     document.head.appendChild(s)
   }
 
   loadOverlay(function () {
-    window.MockOverlay.create('UJET (mobile)')
-    window.MockOverlay.recordCall('UJET', 'sdk-loaded', {})
-    // Flush any calls that were buffered during the race window.
+    window.MockOverlay.create('Mobile Chat')
+    window.MockOverlay.recordCall(partner, 'sdk-loaded', {})
     while (pending.length > 0) {
       var c = pending.shift()
       window.MockOverlay.recordCall(c[0], c[1], c[2])
