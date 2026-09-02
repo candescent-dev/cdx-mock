@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@fastify/static": "^7.0.4",
-    "fastify": "^4.28.1"
+    "fastify": "^5.12.1"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",
