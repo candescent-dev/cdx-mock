@@ -30,7 +30,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@fastify/static": "^7.0.4",
+    "@fastify/static": "^10.1.2",
     "fastify": "^4.28.1"
   },
   "devDependencies": {
